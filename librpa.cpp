@@ -4,17 +4,17 @@
 // C APIs
 LibrpaHandler* create_handler()
 {
-    // create a new instance
+    // create a new instance and append it to the manager
     int instance_id = manager.size();
     LibrpaObject *obj = new LibrpaObject;
     manager.emplace_back(obj);
 
-    // initialize the corresponding handler
-    // LibrpaHandler* h = new LibrpaHandler {instance_id};
+    // initialize a binding handler
     LibrpaHandler* h = new LibrpaHandler {instance_id};
     return h;
 }
 
+// free the data instance that the handler binds
 static void free_handler_data(LibrpaHandler *h)
 {
     if (!h) return;
@@ -22,26 +22,16 @@ static void free_handler_data(LibrpaHandler *h)
     if (h->__instance_id > 0)
     {
         const auto id = h->__instance_id;
-        // Invalid handler whose id was manually changed,
+        // Invalid handler that was manually created with hand-picked id,
         // either oversubscription
-        if (id >= manager.size())
-        {
-            h->__instance_id = 0;
-            return;
-        }
+        if (id >= manager.size()) return;
         auto &p = manager[id];
         // or pointed to an already released instance
-        if (!p)
-        {
-            h->__instance_id = 0;
-            return;
-        }
-        // free the instance before replace it with nullptr
+        if (!p) return;
+        // free the instance and point it to null pointer
         delete p;
         manager[id] = nullptr;
     }
-    // set the id to 0 to invalidate
-    h->__instance_id = 0;
 }
 
 void destroy_handler(LibrpaHandler *h)

@@ -11,12 +11,12 @@ struct LibrpaParams
     int debug;
 };
 
-// Do not create handler by hand
+// Do not create by hand
 struct LibrpaHandler
 {
-    // The only member: an integer that maps to index of the working instance in the manager.
-    // Do not modify it manually, 
-    int __instance_id;
+    // The only member: an integer that maps to the index of working instance in the manager.
+    // The program may not work properly with manually created handler
+    const int __instance_id;
 };
 
 void initialize_librpa_io();
