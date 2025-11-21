@@ -1,0 +1,6 @@
+# vim: ft=make
+CC = gcc
+CXX = g++
+FC = gfortran
+TARGET_C = prototype_new_api.exe_linux
+TARGET_F = prototype_new_api_f.exe_linux

@@ -1,0 +1,3 @@
+# vim: ft=make
+TARGET_C = prototype_new_api.exe_macos
+TARGET_F = prototype_new_api_f.exe_macos
