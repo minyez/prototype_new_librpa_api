@@ -1,12 +1,13 @@
 #include "librpa.h"
 #include "instance_manager.h"
+#include "librpa_dataset.h"
 
 // C APIs
 LibrpaHandler* create_handler()
 {
     // create a new instance and append it to the manager
     int instance_id = manager.size();
-    LibrpaObject *obj = new LibrpaObject;
+    LibrpaDataset *obj = new LibrpaDataset;
     manager.emplace_back(obj);
 
     // initialize a binding handler
@@ -41,9 +42,9 @@ void destroy_handler(LibrpaHandler *h)
     delete h;
 }
 
-static LibrpaObject* get_object(const LibrpaHandler *h)
+static LibrpaDataset* get_dataset(const LibrpaHandler *h)
 {
-    LibrpaObject* p = nullptr;
+    LibrpaDataset* p = nullptr;
     if (h != nullptr)
     {
         const auto id = h->__instance_id;
@@ -52,7 +53,7 @@ static LibrpaObject* get_object(const LibrpaHandler *h)
     return p;
 }
 
-static bool is_null_object(const LibrpaObject* p)
+static bool is_null_object(const LibrpaDataset* p)
 {
     return p == nullptr;
 }
@@ -61,7 +62,7 @@ static bool is_null_object(const LibrpaObject* p)
 int get_value(const LibrpaHandler *h)
 {
     int v = -1;
-    const auto p = get_object(h);
+    const auto p = get_dataset(h);
     if (!is_null_object(p)) v = p->value;
     return v;
 }

@@ -1,13 +1,5 @@
 #pragma once
 #include <vector>
+#include "librpa_dataset.h"
 
-class LibrpaObject
-{
-public:
-    int value = 0;
-
-    void free() {};
-    ~LibrpaObject() { free(); }
-};
-
-extern std::vector<LibrpaObject*> manager;
+extern std::vector<LibrpaDataset*> manager;

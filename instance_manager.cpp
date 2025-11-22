@@ -2,4 +2,4 @@
 #include <cstddef>
 
 // manager[0] is a reserved sentinel (always nullptr); real instances start at 1.
-std::vector<LibrpaObject *> manager{nullptr};
+std::vector<LibrpaDataset *> manager{nullptr};
