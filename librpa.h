@@ -11,7 +11,7 @@ struct LibrpaOptions
     int debug;
 };
 
-void initialize_librpa_options(LibrpaOptions *opts);
+void librpa_init_options(LibrpaOptions *opts);
 
 // Do not create by hand
 struct LibrpaHandler
@@ -21,11 +21,11 @@ struct LibrpaHandler
     const int instance_id_;
 };
 
-LibrpaHandler* create_handler();
+LibrpaHandler* librpa_create_handler();
 
 // void free_handler_data(LibrpaHandler *handler);
 
-void destroy_handler(LibrpaHandler *h);
+void librpa_destroy_handler(LibrpaHandler *h);
 
 int get_value(const LibrpaHandler *handler);
 
@@ -38,6 +38,14 @@ int get_value(const LibrpaHandler *handler);
 
 namespace librpa
 {
+
+// Straighforward inheritance
+// IMPORTANT: DO NOT add extra member variables, which will break the data layout
+class Options : ::LibrpaOptions
+{
+public:
+    Options() { ::librpa_init_options(this); }
+};
 
 class Handler
 {

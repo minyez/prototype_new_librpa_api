@@ -5,10 +5,10 @@ module librpa_f
 
    private
    public :: LibrpaOptions
-   public :: initialize_librpa_options
+   public :: librpa_init_options
    public :: LibrpaHandler
-   public :: create_librpa_handler
-   public :: destroy_librpa_handler
+   public :: librpa_create_handler
+   public :: librpa_destroy_handler
 
    !===== C-side options type =====
    type, bind(c) :: LibrpaOptions_c
@@ -27,10 +27,10 @@ module librpa_f
    integer, parameter :: SYNC_OPTS_F2C = -1
 
    interface
-      subroutine initialize_librpa_options_c(opts_c) bind(c, name="initialize_librpa_options")
+      subroutine librpa_init_options_c(opts_c) bind(c, name="librpa_init_options")
          import :: LibrpaOptions_c
          type(LibrpaOptions_c) :: opts_c
-      end subroutine initialize_librpa_options_c
+      end subroutine librpa_init_options_c
    end interface
 
    !===== C-side handler type =====
@@ -44,17 +44,17 @@ module librpa_f
    end type LibrpaHandler
 
    interface
-      function create_handler_c() bind(c, name="create_handler")
+      function librpa_create_handler_c() bind(c, name="librpa_create_handler")
          import :: c_ptr
-         type(c_ptr) :: create_handler_c      ! C: LibrpaHandler*
-      end function create_handler_c
+         type(c_ptr) :: librpa_create_handler_c      ! C: LibrpaHandler*
+      end function librpa_create_handler_c
    end interface
 
    interface
-      subroutine destroy_handler_c(h) bind(c, name="destroy_handler")
+      subroutine librpa_destroy_handler_c(h) bind(c, name="librpa_destroy_handler")
          import :: LibrpaHandler_c
          type(LibrpaHandler_c) :: h   ! C: LibrpaHandler*
-      end subroutine destroy_handler_c
+      end subroutine librpa_destroy_handler_c
    end interface
 
 contains
@@ -80,30 +80,30 @@ contains
       end if
    end subroutine
 
-   subroutine initialize_librpa_options(opts)
+   subroutine librpa_init_options(opts)
       type(LibrpaOptions), intent(inout) :: opts
-      call initialize_librpa_options_c(opts%opts_c)
+      call librpa_init_options_c(opts%opts_c)
       call sync_opts(opts, SYNC_OPTS_C2F)
-   end subroutine initialize_librpa_options
+   end subroutine librpa_init_options
 
-   subroutine create_librpa_handler(h)
+   subroutine librpa_create_handler(h)
       type(LibrpaHandler), intent(out) :: h
 
       type(c_ptr) :: ptr
       type(LibrpaHandler_c), pointer :: h_c
 
-      ptr = create_handler_c()
+      ptr = librpa_create_handler_c()
       call c_f_pointer(ptr, h_c)
       h%ptr_c_handle => h_c
-   end subroutine create_librpa_handler
+   end subroutine librpa_create_handler
 
-   subroutine destroy_librpa_handler(h)
+   subroutine librpa_destroy_handler(h)
       type(LibrpaHandler), intent(inout) :: h
 
       if (associated(h%ptr_c_handle)) then
-         call destroy_handler_c(h%ptr_c_handle)
+         call librpa_destroy_handler_c(h%ptr_c_handle)
          nullify(h%ptr_c_handle)
       end if
-   end subroutine destroy_librpa_handler
+   end subroutine librpa_destroy_handler
 
 end module

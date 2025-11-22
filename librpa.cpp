@@ -4,13 +4,13 @@
 
 // C APIs
 
-void initialize_librpa_options(LibrpaOptions *opts)
+void librpa_init_options(LibrpaOptions *opts)
 {
     opts->nfreq = 6;
     opts->debug = 0;
 }
 
-LibrpaHandler* create_handler()
+LibrpaHandler* librpa_create_handler()
 {
     // create a new instance and append it to the manager
     int instance_id = manager.size();
@@ -42,7 +42,7 @@ static void free_handler_data(LibrpaHandler *h)
     }
 }
 
-void destroy_handler(LibrpaHandler *h)
+void librpa_destroy_handler(LibrpaHandler *h)
 {
     if (!h) return;
     free_handler_data(h);
@@ -80,12 +80,12 @@ namespace librpa
 
 Handler::Handler(): h(nullptr)
 {
-    h = create_handler();
+    h = ::librpa_create_handler();
 }
 
 Handler::~Handler()
 {
-    destroy_handler(h);
+    ::librpa_destroy_handler(h);
 }
 
 int get_value(const Handler &h)

@@ -28,15 +28,15 @@ int main(int argc, char *argv[])
 
     // initialize(argc, argv);
 
-    auto h = create_handler();
+    auto h = librpa_create_handler();
     cout << h->instance_id_ << endl;
 
     // Create twice without destorying first will lead to memory leak
-    // h = create_handler();
+    // h = librpa_create_handler();
 
-    auto h2 = create_handler();
+    auto h2 = librpa_create_handler();
     cout << h2->instance_id_ << endl;
-    destroy_handler(h2);
+    librpa_destroy_handler(h2);
 
     cout << get_value(h) << endl;
     cout << get_value(h2) << endl;
@@ -45,11 +45,18 @@ int main(int argc, char *argv[])
     cout << h3.get_c_handler()->instance_id_ << endl;
     cout << get_value(h3) << endl;
 
-    destroy_handler(h);
+    librpa_destroy_handler(h);
 
     LibrpaOptions opts;
     cout << "opts.nfreq " << opts.nfreq << endl;
     cout << "opts.debug " << opts.debug << endl;
+    librpa_init_options(&opts);
+    cout << "opts.nfreq " << opts.nfreq << endl;
+    cout << "opts.debug " << opts.debug << endl;
+
+    librpa::Options opts_cpp; // automatic initialization by constructor
+    cout << "opts_cpp.nfreq " << opts.nfreq << endl;
+    cout << "opts_cpp.debug " << opts.debug << endl;
 
     // finalize(true);
     return EXIT_SUCCESS;
