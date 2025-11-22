@@ -16,7 +16,7 @@ CXX ?= mpicxx
 FC ?= mpifort
 CC ?= mpicc
 
-default: $(LIB_C) $(LIB_F) $(TARGET_C) $(TARGET_F)
+default: $(LIB_C) $(LIB_F) $(TARGET_C) $(TARGET_CXX) $(TARGET_F)
 
 $(TARGET_CXX): $(LIB_C) main.o
 	$(CXX) -o $@ main.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
