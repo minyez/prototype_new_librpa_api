@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-struct LibrpaParams
+struct LibrpaOptions
 {
     int nfreq;
     int debug;

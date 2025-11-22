@@ -2,5 +2,14 @@
 CC = gcc
 CXX = g++
 FC = gfortran
+LIBEXT = so
+LIBNAME_C = my_linux
+LIBNAME_F = my_linux_f
 TARGET_C = prototype_new_api.exe_linux
 TARGET_F = prototype_new_api_f.exe_linux
+
+# For archiving shared library and linking
+ARLD_OPT = -soname
+ARLD_LIB_PREFIX =
+LD_RPATH_FLAG   = -Wl,-rpath,'$$ORIGIN'
+SHARED_FLAG = -shared

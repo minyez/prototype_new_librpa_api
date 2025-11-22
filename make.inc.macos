@@ -1,3 +1,15 @@
 # vim: ft=make
+LIBEXT = dylib
+LIBNAME_C = my_macos
+LIBNAME_F = my_macos_f
 TARGET_C = prototype_new_api.exe_macos
 TARGET_F = prototype_new_api_f.exe_macos
+
+# For archiving shared library and linking
+ARLD_OPT = -install_name
+ARLD_LIB_PREFIX = @rpath/
+# Comment out to remove warning:
+#   ld: warning: duplicate -rpath '@loader_path'
+# LD_RPATH_FLAG   = -Wl,-rpath,@loader_path
+LD_RPATH_FLAG   =
+SHARED_FLAG = -dynamiclib
