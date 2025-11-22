@@ -6,18 +6,18 @@
 #include "instance_manager.h"
 
 // Internal functions to access datasets
-static LibrpaDataset* get_dataset(const LibrpaHandler *h)
+static librpa_int::Dataset* get_dataset(const LibrpaHandler *h)
 {
-    LibrpaDataset* p = nullptr;
+    librpa_int::Dataset* p = nullptr;
     if (h != nullptr)
     {
         const auto id = h->instance_id_;
-        if (id >= 0 && id < manager.size()) p = manager[id];
+        if (id >= 0 && id < librpa_int::manager.size()) p = librpa_int::manager[id];
     }
     return p;
 }
 
-static bool is_null_dataset_ptr(const LibrpaDataset* p)
+static bool is_null_dataset_ptr(const librpa_int::Dataset* p)
 {
     return p == nullptr;
 }

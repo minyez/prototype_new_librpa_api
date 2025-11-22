@@ -9,9 +9,9 @@
 LibrpaHandler* librpa_create_handler()
 {
     // create a new instance and append it to the manager
-    int instance_id = manager.size();
-    LibrpaDataset *obj = new LibrpaDataset;
-    manager.emplace_back(obj);
+    int instance_id = librpa_int::manager.size();
+    librpa_int::LibrpaDataset *obj = new librpa_int::LibrpaDataset;
+    librpa_int::manager.emplace_back(obj);
 
     // initialize a binding handler
     LibrpaHandler* h = new LibrpaHandler {instance_id};
@@ -28,13 +28,13 @@ static void free_handler_data(LibrpaHandler *h)
         const auto id = h->instance_id_;
         // Invalid handler that was manually created with hand-picked id,
         // either oversubscription
-        if (id >= manager.size()) return;
-        auto &p = manager[id];
+        if (id >= librpa_int::manager.size()) return;
+        auto &p = librpa_int::manager[id];
         // or pointed to an already released instance
         if (!p) return;
         // free the instance and point it to null pointer
         delete p;
-        manager[id] = nullptr;
+        librpa_int::manager[id] = nullptr;
     }
 }
 

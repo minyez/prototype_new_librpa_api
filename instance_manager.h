@@ -2,4 +2,9 @@
 #include <vector>
 #include "dataset.h"
 
-extern std::vector<LibrpaDataset*> manager;
+namespace librpa_int
+{
+
+extern std::vector<Dataset*> manager;
+
+}

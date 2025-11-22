@@ -2,5 +2,10 @@
 
 #include <cstddef>
 
+namespace librpa_int
+{
+
 // manager[0] is a reserved sentinel (always nullptr); real instances start at 1.
-std::vector<LibrpaDataset *> manager{nullptr};
+std::vector<Dataset *> manager{nullptr};
+
+}

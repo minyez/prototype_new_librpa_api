@@ -1,11 +1,15 @@
 #pragma once
 
-class LibrpaDataset
+namespace librpa_int
+{
+
+class Dataset
 {
 public:
     int value = 0;
 
     void free() {};
-    ~LibrpaDataset() { free(); }
+    ~Dataset() { free(); }
 };
 
+}
