@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
     // Create twice without destorying first will lead to memory leak
     // h = create_handler();
 
-
     auto h2 = create_handler();
     cout << h2->instance_id_ << endl;
     destroy_handler(h2);
@@ -47,6 +46,10 @@ int main(int argc, char *argv[])
     cout << get_value(h3) << endl;
 
     destroy_handler(h);
+
+    LibrpaOptions opts;
+    cout << "opts.nfreq " << opts.nfreq << endl;
+    cout << "opts.debug " << opts.debug << endl;
 
     // finalize(true);
     return EXIT_SUCCESS;

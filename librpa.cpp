@@ -3,6 +3,13 @@
 #include "librpa_dataset.h"
 
 // C APIs
+
+void initialize_librpa_options(LibrpaOptions *opts)
+{
+    opts->nfreq = 6;
+    opts->debug = 0;
+}
+
 LibrpaHandler* create_handler()
 {
     // create a new instance and append it to the manager

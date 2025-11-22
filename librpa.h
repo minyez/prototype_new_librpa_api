@@ -11,6 +11,8 @@ struct LibrpaOptions
     int debug;
 };
 
+void initialize_librpa_options(LibrpaOptions *opts);
+
 // Do not create by hand
 struct LibrpaHandler
 {
@@ -18,8 +20,6 @@ struct LibrpaHandler
     // The program may not work properly with manually created handler
     const int instance_id_;
 };
-
-void initialize_librpa_io();
 
 LibrpaHandler* create_handler();
 

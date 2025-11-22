@@ -5,9 +5,10 @@ module librpa_f
 
    private
    public :: LibrpaOptions
+   public :: initialize_librpa_options
    public :: LibrpaHandler
-   public :: create_handler
-   public :: destroy_handler
+   public :: create_librpa_handler
+   public :: destroy_librpa_handler
 
    !===== C-side options type =====
    type, bind(c) :: LibrpaOptions_c
@@ -17,10 +18,20 @@ module librpa_f
 
    ! High-level Fortran wrapper
    type :: LibrpaOptions
-      type(LibrpaOptions_c) :: opts_c
+      type(LibrpaOptions_c), private :: opts_c
       integer :: nfreq
       logical :: debug
    end type LibrpaOptions
+
+   integer, parameter :: SYNC_OPTS_C2F = 1
+   integer, parameter :: SYNC_OPTS_F2C = -1
+
+   interface
+      subroutine initialize_librpa_options_c(opts_c) bind(c, name="initialize_librpa_options")
+         import :: LibrpaOptions_c
+         type(LibrpaOptions_c) :: opts_c
+      end subroutine initialize_librpa_options_c
+   end interface
 
    !===== C-side handler type =====
    type, bind(c) :: LibrpaHandler_c
@@ -29,7 +40,7 @@ module librpa_f
 
    ! High-level Fortran wrapper
    type :: LibrpaHandler
-      type(LibrpaHandler_c), pointer :: h_c => null()
+      type(LibrpaHandler_c), pointer :: ptr_c_handle => null()
    end type LibrpaHandler
 
    interface
@@ -48,7 +59,34 @@ module librpa_f
 
 contains
 
-   subroutine create_handler(h)
+   ! Synchronize option values between the Fortran object and the containing C object
+   ! Everytime opts_c used through any C interface, its value should be synchronized from opts
+   !   call sync_opts(opts, .false.)
+   subroutine sync_opts(opts, direction)
+      type(LibrpaOptions), intent(inout) :: opts
+      integer, intent(in) :: direction
+
+      if (direction .eq. SYNC_OPTS_C2F) then
+         ! From C object to Fortran
+         opts%nfreq = opts%opts_c%nfreq
+         opts%debug = (opts%opts_c%debug .ne. 0)
+      else if (direction .eq. SYNC_OPTS_F2C) then
+         ! From Fortran object to C
+         opts%opts_c%nfreq = opts%nfreq
+         opts%opts_c%debug = 0
+         if (opts%debug) opts%opts_c%debug = 1
+      else
+         stop "internal error - illegal direction value"
+      end if
+   end subroutine
+
+   subroutine initialize_librpa_options(opts)
+      type(LibrpaOptions), intent(inout) :: opts
+      call initialize_librpa_options_c(opts%opts_c)
+      call sync_opts(opts, SYNC_OPTS_C2F)
+   end subroutine initialize_librpa_options
+
+   subroutine create_librpa_handler(h)
       type(LibrpaHandler), intent(out) :: h
 
       type(c_ptr) :: ptr
@@ -56,16 +94,16 @@ contains
 
       ptr = create_handler_c()
       call c_f_pointer(ptr, h_c)
-      h%h_c => h_c
-   end subroutine create_handler
+      h%ptr_c_handle => h_c
+   end subroutine create_librpa_handler
 
-   subroutine destroy_handler(h)
+   subroutine destroy_librpa_handler(h)
       type(LibrpaHandler), intent(inout) :: h
 
-      if (associated(h%h_c)) then
-         call destroy_handler_c(h%h_c)
-         nullify(h%h_c)
+      if (associated(h%ptr_c_handle)) then
+         call destroy_handler_c(h%ptr_c_handle)
+         nullify(h%ptr_c_handle)
       end if
-   end subroutine destroy_handler
+   end subroutine destroy_librpa_handler
 
 end module
