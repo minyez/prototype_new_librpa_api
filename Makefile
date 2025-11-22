@@ -9,7 +9,7 @@ endif
 LIB_C = lib$(LIBNAME_C).$(LIBEXT)
 LIB_F = lib$(LIBNAME_F).$(LIBEXT)
 
-objects_c = librpa.o instance_manager.o
+objects_c = librpa_options.o librpa_handler.o librpa.o instance_manager.o
 objects_f = librpa_f.o
 
 CXX ?= mpicxx

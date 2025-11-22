@@ -1,8 +1,9 @@
 #include <cstddef>
 // #include <mpi.h>
-#include "librpa.h"
 #include <iostream>
 #include <iomanip>
+
+#include "librpa.h"
 
 #include <omp.h>  // Make sure to include OpenMP header
 
