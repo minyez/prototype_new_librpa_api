@@ -10,7 +10,7 @@ LibrpaHandler* librpa_create_handler()
 {
     // create a new instance and append it to the manager
     int instance_id = librpa_int::manager.size();
-    librpa_int::LibrpaDataset *obj = new librpa_int::LibrpaDataset;
+    librpa_int::Dataset *obj = new librpa_int::Dataset;
     librpa_int::manager.emplace_back(obj);
 
     // initialize a binding handler

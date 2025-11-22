@@ -18,8 +18,11 @@ CC ?= mpicc
 
 default: $(LIB_C) $(LIB_F) $(TARGET_C) $(TARGET_F)
 
-$(TARGET_C): $(LIB_C) main.o
+$(TARGET_CXX): $(LIB_C) main.o
 	$(CXX) -o $@ main.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
+
+$(TARGET_C): $(LIB_C) main_c.o
+	$(CC) -o $@ main_c.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
 
 $(TARGET_F): $(LIB_C) $(LIB_F) main_f.o
 	$(FC) -o $@ main_f.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_F) -l$(LIBNAME_C) -lstdc++ -fopenmp

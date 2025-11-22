@@ -5,7 +5,8 @@ FC = gfortran
 LIBEXT = so
 LIBNAME_C = my_linux
 LIBNAME_F = my_linux_f
-TARGET_C = prototype_new_api.exe_linux
+TARGET_C = prototype_new_api_c.exe_linux
+TARGET_CXX = prototype_new_api.exe_linux
 TARGET_F = prototype_new_api_f.exe_linux
 
 # For archiving shared library and linking

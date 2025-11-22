@@ -2,7 +2,8 @@
 LIBEXT = dylib
 LIBNAME_C = my_macos
 LIBNAME_F = my_macos_f
-TARGET_C = prototype_new_api.exe_macos
+TARGET_C = prototype_new_api_c.exe_macos
+TARGET_CXX = prototype_new_api.exe_macos
 TARGET_F = prototype_new_api_f.exe_macos
 
 # For archiving shared library and linking

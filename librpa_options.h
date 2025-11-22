@@ -5,12 +5,13 @@
 extern "C" {
 #endif
 
-struct LibrpaOptions
+typedef struct
 {
     int nfreq;
     int debug;
-};
+} LibrpaOptions;
 
+// Initialize options to default values
 void librpa_init_options(LibrpaOptions *opts);
 
 #ifdef __cplusplus
@@ -24,7 +25,8 @@ namespace librpa
 {
 
 // Straighforward inheritance
-// IMPORTANT: DO NOT add extra member variables, which will break the data layout
+// IMPORTANT: DO NOT add extra member variables here, which will break the inheritated data layout
+// New control options should be put under the LibrpaOptions C structure
 class Options : ::LibrpaOptions
 {
 public:
