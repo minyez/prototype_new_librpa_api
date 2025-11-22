@@ -29,17 +29,21 @@ int main(int argc, char *argv[])
     // initialize(argc, argv);
 
     auto h = create_handler();
-    cout << h->__instance_id << endl;
+    cout << h->instance_id_ << endl;
+
+    // Create twice without destorying first will lead to memory leak
+    // h = create_handler();
+
 
     auto h2 = create_handler();
-    cout << h2->__instance_id << endl;
+    cout << h2->instance_id_ << endl;
     destroy_handler(h2);
 
     cout << get_value(h) << endl;
     cout << get_value(h2) << endl;
 
     librpa::Handler h3;
-    cout << h3.get_c_handler()->__instance_id << endl;
+    cout << h3.get_c_handler()->instance_id_ << endl;
     cout << get_value(h3) << endl;
 
     destroy_handler(h);

@@ -16,7 +16,7 @@ struct LibrpaHandler
 {
     // The only member: an integer that maps to the index of working instance in the manager.
     // The program may not work properly with manually created handler
-    const int __instance_id;
+    const int instance_id_;
 };
 
 void initialize_librpa_io();

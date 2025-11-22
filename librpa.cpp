@@ -20,9 +20,9 @@ static void free_handler_data(LibrpaHandler *h)
 {
     if (!h) return;
     // destroy the instance
-    if (h->__instance_id > 0)
+    if (h->instance_id_ > 0)
     {
-        const auto id = h->__instance_id;
+        const auto id = h->instance_id_;
         // Invalid handler that was manually created with hand-picked id,
         // either oversubscription
         if (id >= manager.size()) return;
@@ -47,7 +47,7 @@ static LibrpaDataset* get_dataset(const LibrpaHandler *h)
     LibrpaDataset* p = nullptr;
     if (h != nullptr)
     {
-        const auto id = h->__instance_id;
+        const auto id = h->instance_id_;
         if (id >= 0 && id < manager.size()) p = manager[id];
     }
     return p;
