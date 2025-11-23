@@ -1,7 +1,10 @@
 # vim: ft=make
-CC = gcc
-CXX = g++
-FC = gfortran
+# CC = gcc
+# CXX = g++
+# FC = gfortran
+CC = mpicc
+CXX = mpicxx
+FC = mpifort
 LIBEXT = so
 LIBNAME_C = my_linux
 LIBNAME_F = my_linux_f

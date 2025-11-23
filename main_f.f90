@@ -7,12 +7,13 @@ program main
 
    type(LibrpaHandler) :: h, h2
    type(LibrpaOptions) :: opts
+   integer :: comm_test = 0
    integer :: ierr
 
-   call MPI_Init()
+   call MPI_Init(ierr)
 
-   call librpa_create_handler(h)
-   call librpa_create_handler(h2)
+   call librpa_create_handler(h, MPI_COMM_WORLD)
+   call librpa_create_handler(h2, MPI_COMM_WORLD)
 
    ! Create twice without destroying first will lead to memory leak
    ! call destroy_handler(h2)
@@ -32,6 +33,6 @@ program main
    write(*,*) opts%nfreq
    write(*,*) opts%debug
 
-   call MPI_Finalize()
+   call MPI_Finalize(ierr)
 
 end program main

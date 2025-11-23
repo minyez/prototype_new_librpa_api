@@ -6,11 +6,11 @@
 #include "instance_manager.h"
 
 // C APIs
-LibrpaHandler* librpa_create_handler()
+LibrpaHandler* librpa_create_handler(MPI_Comm comm)
 {
     // create a new instance and append it to the manager
     int instance_id = librpa_int::manager.size();
-    librpa_int::Dataset *obj = new librpa_int::Dataset;
+    librpa_int::Dataset *obj = new librpa_int::Dataset(comm);
     librpa_int::manager.emplace_back(obj);
 
     // initialize a binding handler
@@ -50,9 +50,9 @@ void librpa_destroy_handler(LibrpaHandler *h)
 namespace librpa
 {
 
-Handler::Handler(): h(nullptr)
+Handler::Handler(const MPI_Comm comm): h(nullptr)
 {
-    h = ::librpa_create_handler();
+    h = ::librpa_create_handler(comm);
 }
 
 Handler::~Handler()

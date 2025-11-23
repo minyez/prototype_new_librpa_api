@@ -1,4 +1,5 @@
 #pragma once
+#include "librpa_config.h"
 
 // C APIs
 #ifdef __cplusplus
@@ -13,7 +14,7 @@ typedef struct
     const int instance_id_;
 } LibrpaHandler;
 
-LibrpaHandler* librpa_create_handler();
+LibrpaHandler* librpa_create_handler(MPI_Comm comm);
 
 // void free_handler_data(LibrpaHandler *handler);
 
@@ -34,7 +35,7 @@ class Handler
 private:
     LibrpaHandler *h;
 public:
-    Handler();
+    Handler(MPI_Comm comm);
     LibrpaHandler *get_c_handler() const { return h; }
     ~Handler();
 };

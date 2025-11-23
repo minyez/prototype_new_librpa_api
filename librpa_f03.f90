@@ -1,5 +1,6 @@
 module librpa_f03
 
+   use mod_mpi
    use iso_c_binding, only: c_ptr, c_int, c_double, c_f_pointer
    implicit none
 
@@ -44,8 +45,9 @@ module librpa_f03
    end type LibrpaHandler
 
    interface
-      function librpa_create_handler_c() bind(c, name="librpa_create_handler")
-         import :: c_ptr
+      function librpa_create_handler_c(comm_c) bind(c, name="librpa_create_handler")
+         import :: c_ptr, c_int
+         integer(c_int) :: comm_c
          type(c_ptr) :: librpa_create_handler_c      ! C: LibrpaHandler*
       end function librpa_create_handler_c
    end interface
@@ -86,13 +88,17 @@ contains
       call sync_opts(opts, SYNC_OPTS_C2F)
    end subroutine librpa_init_options
 
-   subroutine librpa_create_handler(h)
+   subroutine librpa_create_handler(h, comm)
       type(LibrpaHandler), intent(out) :: h
+      integer, intent(in) :: comm
 
       type(c_ptr) :: ptr
       type(LibrpaHandler_c), pointer :: h_c
+      integer(c_int) :: comm_c = 0
 
-      ptr = librpa_create_handler_c()
+      comm_c = int(comm, kind=c_int)
+
+      ptr = librpa_create_handler_c(comm_c)
       call c_f_pointer(ptr, h_c)
       h%ptr_c_handle => h_c
    end subroutine librpa_create_handler

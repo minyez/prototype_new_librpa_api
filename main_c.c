@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "config_mpi.h"
 #include "librpa.h"
+#include "librpa_config.h"
 
 static void initialize(int argc, char **argv)
 {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     initialize(argc, argv);
 
     LibrpaHandler *h;
-    h = librpa_create_handler();
+    h = librpa_create_handler(MPI_COMM_WORLD);
     int a = get_value(h);
     printf("%d\n", a);
     librpa_destroy_handler(h);

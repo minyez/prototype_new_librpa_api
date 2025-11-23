@@ -1,7 +1,6 @@
 #include <cstddef>
 #include <iostream>
 
-#include "config_mpi.h"
 #include "librpa.h"
 
 static void initialize(int argc, char **argv)
@@ -28,20 +27,20 @@ int main(int argc, char *argv[])
 
     // initialize(argc, argv);
 
-    auto h = librpa_create_handler();
+    auto h = librpa_create_handler(MPI_COMM_WORLD);
     cout << h->instance_id_ << endl;
 
     // Create twice without destorying first will lead to memory leak
     // h = librpa_create_handler();
 
-    auto h2 = librpa_create_handler();
+    auto h2 = librpa_create_handler(MPI_COMM_WORLD);
     cout << h2->instance_id_ << endl;
     librpa_destroy_handler(h2);
 
     cout << get_value(h) << endl;
     cout << get_value(h2) << endl;
 
-    librpa::Handler h3;
+    librpa::Handler h3(MPI_COMM_WORLD);
     cout << h3.get_c_handler()->instance_id_ << endl;
     cout << get_value(h3) << endl;
 
