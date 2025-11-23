@@ -1,11 +1,15 @@
-program main_librpa_f
+program main
 
+   use mod_mpi
    use librpa_f03
 
    implicit none
 
    type(LibrpaHandler) :: h, h2
    type(LibrpaOptions) :: opts
+   integer :: ierr
+
+   call MPI_Init()
 
    call librpa_create_handler(h)
    call librpa_create_handler(h2)
@@ -28,5 +32,6 @@ program main_librpa_f
    write(*,*) opts%nfreq
    write(*,*) opts%debug
 
-end program main_librpa_f
+   call MPI_Finalize()
 
+end program main

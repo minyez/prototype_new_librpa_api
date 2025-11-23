@@ -9,23 +9,36 @@ endif
 LIB_C = lib$(LIBNAME_C).$(LIBEXT)
 LIB_F = lib$(LIBNAME_F).$(LIBEXT)
 
-objects_c = librpa_options.o librpa_handler.o librpa.o instance_manager.o
-objects_f = librpa_f03.o
-
 CXX ?= mpicxx
 FC ?= mpifort
 CC ?= mpicc
 
+MPI_OK := $(shell \
+  tmp_src=$$(mktemp mpi_test.XXXXXX.f90); \
+  tmp_exe=$$(mktemp mpi_test.XXXXXX.exe); \
+  printf 'program test_mpi\n  use mpi\n  integer :: ierr\n  call MPI_Init(ierr)\n  call MPI_Finalize(ierr)\nend program test_mpi\n' > $$tmp_src; \
+  $(FC) $(MPI_FLAGS) $$tmp_src -o $$tmp_exe >/dev/null 2>&1 && echo yes || echo no; \
+  rm -f $$tmp_src $$tmp_exe )
+
+ifeq ($(MPI_OK),yes)
+  MOD_MPI_OBJ := mod_mpi_parallel.o
+else
+  MOD_MPI_OBJ := mod_mpi_serial.o
+endif
+
+objects_c = librpa_options.o librpa_handler.o librpa.o instance_manager.o
+objects_f = librpa_f03.o
+
 default: $(LIB_C) $(LIB_F) $(TARGET_C) $(TARGET_CXX) $(TARGET_F)
 
 $(TARGET_CXX): $(LIB_C) main.o
-	$(CXX) -o $@ main.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
+	$(CXX) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
 
 $(TARGET_C): $(LIB_C) main_c.o
-	$(CC) -o $@ main_c.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
+	$(CC) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) -fopenmp
 
-$(TARGET_F): $(LIB_C) $(LIB_F) main_f.o
-	$(FC) -o $@ main_f.o $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_F) -l$(LIBNAME_C) -lstdc++ -fopenmp
+$(TARGET_F): $(LIB_C) $(LIB_F) main_f.o $(MOD_MPI_OBJ)
+	$(FC) -o $@ $(wordlist 3,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_F) -l$(LIBNAME_C) -lstdc++ -fopenmp
 
 $(LIB_C): $(objects_c)
 	$(CXX) $(SHARED_FLAG) -o $@ $^ -Wl,$(ARLD_OPT),$(ARLD_LIB_PREFIX)$(LIB_C)
@@ -39,8 +52,8 @@ $(LIB_F): $(objects_f)
 %.o: %.c
 	$(CC) -fopenmp -fPIC -o $@ -c $<
 
-%.o: %.f90
+%.o: %.f90 $(MOD_MPI_OBJ)
 	$(FC) -fopenmp -fPIC -o $@ -c $<
 
 clean:
-	rm -f *.o *.mod *.exe* *.so *.dylib librpa_para*.out
+	rm -rf *.o *.mod *.exe* *.so *.dylib librpa_para*.out
