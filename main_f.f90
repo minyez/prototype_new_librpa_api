@@ -9,8 +9,12 @@ program main
    type(LibrpaOptions) :: opts
    integer :: comm_test = 0
    integer :: ierr
+   integer :: provided
 
-   call MPI_Init(ierr)
+   call MPI_Init_thread(MPI_THREAD_MULTIPLE, provided, ierr);
+   if (MPI_THREAD_MULTIPLE .ne. provided) then
+      write(*,*) "Warning: MPI_Init_thread provide ", provided, " != required", MPI_THREAD_MULTIPLE
+   endif
 
    call librpa_create_handler(h, MPI_COMM_WORLD)
    call librpa_create_handler(h2, MPI_COMM_WORLD)
