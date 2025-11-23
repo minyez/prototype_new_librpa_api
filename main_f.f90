@@ -1,6 +1,6 @@
 program main_librpa_f
 
-   use librpa_f
+   use librpa_f03
 
    implicit none
 

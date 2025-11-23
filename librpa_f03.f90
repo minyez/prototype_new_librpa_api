@@ -1,4 +1,4 @@
-module librpa_f
+module librpa_f03
 
    use iso_c_binding, only: c_ptr, c_int, c_double, c_f_pointer
    implicit none
@@ -35,7 +35,7 @@ module librpa_f
 
    !===== C-side handler type =====
    type, bind(c) :: LibrpaHandler_c
-      integer(c_int) :: instance_id   ! const int __instance_id;
+      integer(c_int) :: instance_id   ! const int instance_id_;
    end type LibrpaHandler_c
 
    ! High-level Fortran wrapper
@@ -106,4 +106,4 @@ contains
       end if
    end subroutine librpa_destroy_handler
 
-end module
+end module librpa_f03
