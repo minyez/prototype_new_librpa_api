@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "librpa.h"
-#include "librpa_config.h"
+#include "librpa/include/librpa.h"
+#include "librpa/include/librpa_config.h"
 
 static void initialize(int argc, char **argv)
 {

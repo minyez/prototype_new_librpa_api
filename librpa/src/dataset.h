@@ -1,5 +1,5 @@
 #pragma once
-#include "librpa_config.h"
+#include "../include/librpa_config.h"
 
 namespace librpa_int
 {

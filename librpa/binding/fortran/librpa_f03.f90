@@ -1,6 +1,5 @@
 module librpa_f03
 
-   use mod_mpi
    use iso_c_binding, only: c_ptr, c_int, c_double, c_f_pointer
    implicit none
 

@@ -1,8 +1,9 @@
 #include <cstddef>
 #include <iostream>
 
-#include "librpa.h"
-#include "instance_manager.h"
+#include "librpa/include/librpa.h"
+// Internal header, just for test
+#include "librpa/src/instance_manager.h"
 
 static void initialize(int argc, char **argv)
 {
@@ -28,7 +29,8 @@ int main(int argc, char *argv[])
 
     // initialize(argc, argv);
 
-    auto h = librpa_create_handler(1000);
+    int fake_comm = 1000;
+    auto h = librpa_create_handler(fake_comm);
     cout << h->instance_id_ << endl;
 
     // Create twice without destorying first will lead to memory leak

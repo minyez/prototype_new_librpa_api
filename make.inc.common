@@ -1,0 +1,16 @@
+# vim: ft=make
+USE_MPI := $(shell \
+  tmp_src=$$(mktemp mpi_test.XXXXXX.f90); \
+  tmp_exe=$$(mktemp mpi_test.XXXXXX.exe); \
+  printf 'program test_mpi\n  use mpi\n  integer :: ierr\n  call MPI_Init(ierr)\n  call MPI_Finalize(ierr)\nend program test_mpi\n' > $$tmp_src; \
+  $(FC) $(MPI_FLAGS) $$tmp_src -o $$tmp_exe >/dev/null 2>&1 && echo yes || echo no; \
+  rm -rf $$tmp_src $$tmp_exe mpi_test.XXXXXX.exe.dSYM)
+
+ifeq ($(USE_MPI),yes)
+  CFLAGS += -D__USE_MPI__
+  FCFLAGS += -D__USE_MPI__
+  CXXFLAGS += -D__USE_MPI__
+endif
+
+# For debug
+# FCFLAGS += -Wall -O0 -fbacktrace -fcheck=bounds -Wno-unused-variable -Wno-ampersand -Wno-tabs -Wno-unused-dummy-argument -Wuninitialized -fcheck=pointer -fallow-argument-mismatch -ffree-line-length-none

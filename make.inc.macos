@@ -9,6 +9,14 @@ TARGET_C = prototype_new_api_c.exe_macos
 TARGET_CXX = prototype_new_api.exe_macos
 TARGET_F = prototype_new_api_f.exe_macos
 
+LIB_C = lib$(LIBNAME_C).$(LIBEXT)
+LIB_F = lib$(LIBNAME_F).$(LIBEXT)
+
+COMMFLAGS = -g -fopenmp -fPIC
+CFLAGS = $(COMMFLAGS)
+CXXFLAGS = $(COMMFLAGS)
+FCFLAGS = $(COMMFLAGS)
+
 # For archiving shared library and linking
 ARLD_OPT = -install_name
 ARLD_LIB_PREFIX = @rpath/
@@ -16,4 +24,5 @@ ARLD_LIB_PREFIX = @rpath/
 #   ld: warning: duplicate -rpath '@loader_path'
 # LD_RPATH_FLAG   = -Wl,-rpath,@loader_path
 LD_RPATH_FLAG   =
+LD_RPATH_FLAG   = -Wl,-rpath,@loader_path/librpa
 SHARED_FLAG = -dynamiclib

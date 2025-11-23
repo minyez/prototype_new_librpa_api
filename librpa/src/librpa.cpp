@@ -1,5 +1,5 @@
 // Public headers (prefixed by librpa)
-#include "librpa.h"
+#include "../include/librpa.h"
 
 // Internal headers
 #include "dataset.h"

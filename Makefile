@@ -5,68 +5,48 @@ endif
 ifeq ($(OS), Darwin)
     include make.inc.macos
 endif
-
-LIB_C = lib$(LIBNAME_C).$(LIBEXT)
-LIB_F = lib$(LIBNAME_F).$(LIBEXT)
-
-CXX ?= mpicxx
-FC ?= mpifort
-CC ?= mpicc
-
-COMMFLAGS = -g -fopenmp -fPIC
-
-MPI_OK := $(shell \
-  tmp_src=$$(mktemp mpi_test.XXXXXX.f90); \
-  tmp_exe=$$(mktemp mpi_test.XXXXXX.exe); \
-  printf 'program test_mpi\n  use mpi\n  integer :: ierr\n  call MPI_Init(ierr)\n  call MPI_Finalize(ierr)\nend program test_mpi\n' > $$tmp_src; \
-  $(FC) $(MPI_FLAGS) $$tmp_src -o $$tmp_exe >/dev/null 2>&1 && echo yes || echo no; \
-  rm -f $$tmp_src $$tmp_exe )
+include make.inc.common
 
 ifeq ($(MPI_OK),yes)
   MOD_MPI_OBJ := mod_mpi_parallel.o
-  COMMFLAGS += -D__USE_MPI__
 else
   MOD_MPI_OBJ := mod_mpi_serial.o
 endif
 
-CFLAGS = $(COMMFLAGS)
-CXXFLAGS = $(COMMFLAGS)
-FCFLAGS = $(COMMFLAGS)
+LIBPATH_FLAGS = -L. -L./librpa
+INC_FLAGS = -I./librpa/include
 
-# For debug
-# FCFLAGS += -Wall -O0 -fbacktrace -fcheck=bounds -Wno-unused-variable -Wno-ampersand -Wno-tabs -Wno-unused-dummy-argument -Wuninitialized -fcheck=pointer -fallow-argument-mismatch -ffree-line-length-none
+.PHONY: default libs
 
-objects_c = librpa_options.o librpa_handler.o librpa.o instance_manager.o
-objects_f = librpa_f03.o
+default: libs $(TARGET_C) $(TARGET_CXX) $(TARGET_F)
 
-default: $(LIB_C) $(LIB_F) $(TARGET_C) $(TARGET_CXX) $(TARGET_F)
+libs:
+	cd librpa && $(MAKE)
 
-$(TARGET_CXX): $(LIB_C) main.o
-	$(CXX) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C) $(CFLAGS)
+librpa/$(LIB_C): libs
 
-$(TARGET_C): $(LIB_C) main_c.o
-	$(CC) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_C)
+librpa/$(LIB_F): libs
 
-$(TARGET_F): $(LIB_C) $(LIB_F) main_f.o $(MOD_MPI_OBJ)
-	$(FC) -o $@ $(wordlist 3,$(words $^),$^) $(LD_RPATH_FLAG) -L$(PWD) -l$(LIBNAME_F) -l$(LIBNAME_C) -lstdc++
+$(TARGET_CXX): libs main.o
+	$(CXX) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) $(LIBPATH_FLAGS) -l$(LIBNAME_C) $(CFLAGS)
 
-$(LIB_C): $(objects_c)
-	$(CXX) $(SHARED_FLAG) -o $@ $^ -Wl,$(ARLD_OPT),$(ARLD_LIB_PREFIX)$(LIB_C)
+$(TARGET_C): libs main_c.o
+	$(CC) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) $(LIBPATH_FLAGS) -l$(LIBNAME_C)
 
-$(LIB_F): $(objects_f)
-	$(FC) $(SHARED_FLAG) -o $@ $^ -L$(PWD) -l$(LIBNAME_C) -Wl,$(ARLD_OPT),$(ARLD_LIB_PREFIX)$(LIB_F)
+$(TARGET_F): libs main_f.o $(MOD_MPI_OBJ)
+	$(FC) -o $@ $(wordlist 2,$(words $^),$^) $(LD_RPATH_FLAG) $(LIBPATH_FLAGS) -l$(LIBNAME_F) -l$(LIBNAME_C) -lstdc++
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(INC_FLAGS) -o $@ -c $<
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) $(INC_FLAGS) -o $@ -c $<
 
 %.o: %.f90 $(MOD_MPI_OBJ)
-	$(FC) $(FCFLAGS) -o $@ -c $<
+	$(FC) $(FCFLAGS) $(INC_FLAGS) -o $@ -c $<
 
 mod_mpi_%.o: mod_mpi_%.f90
 	$(FC) $(FCFLAGS) -o $@ -c $<
 
 clean:
-	rm -rf *.o *.mod *.exe* *.so *.dylib librpa_para*.out
+	rm -rf *.o *.mod *.exe* *.so *.dylib
