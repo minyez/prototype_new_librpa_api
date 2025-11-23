@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "librpa/include/librpa.h"
-#include "librpa/include/librpa_config.h"
+#include "interface_mpi.h"
 
 static void initialize(int argc, char **argv)
 {

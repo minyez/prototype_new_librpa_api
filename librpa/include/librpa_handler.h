@@ -1,5 +1,4 @@
 #pragma once
-#include "librpa_config.h"
 
 // C APIs
 #ifdef __cplusplus

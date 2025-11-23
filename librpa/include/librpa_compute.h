@@ -1,0 +1,26 @@
+#pragma once
+#include "librpa_handler.h"
+
+// C APIs
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int get_value(const LibrpaHandler *handler);
+
+#ifdef __cplusplus
+}
+#endif
+
+// C++ APIs
+#ifdef __cplusplus
+
+namespace librpa
+{
+
+int get_value(const Handler &h);
+
+}
+
+#endif
+

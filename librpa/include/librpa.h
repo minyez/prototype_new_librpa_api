@@ -1,31 +1,8 @@
 #pragma once
 
-// Fundamental configurations
-#include "librpa_config.h"
-
 // Fundamental classes
 #include "librpa_options.h"
 #include "librpa_handler.h"
 
-// C APIs
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int get_value(const LibrpaHandler *handler);
-
-#ifdef __cplusplus
-}
-#endif
-
-// C++ APIs
-#ifdef __cplusplus
-
-namespace librpa
-{
-
-int get_value(const Handler &h);
-
-}
-
-#endif
+// Computation APIs
+#include "librpa_compute.h"

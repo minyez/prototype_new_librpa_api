@@ -7,7 +7,7 @@ ifeq ($(OS), Darwin)
 endif
 include ../make.inc.common
 
-objects_lib_c = src/librpa_options.o src/librpa_handler.o src/librpa.o src/instance_manager.o
+objects_lib_c = src/librpa_options.o src/librpa_handler.o src/librpa_compute.o src/instance_manager.o
 objects_lib_f = binding/fortran/librpa_f03.o
 
 .PHONY: default clean

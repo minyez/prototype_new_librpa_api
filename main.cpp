@@ -1,6 +1,8 @@
 #include <cstddef>
 #include <iostream>
 
+#include "interface_mpi.h"
+
 #include "librpa/include/librpa.h"
 // Internal header, just for test
 #include "librpa/src/instance_manager.h"
