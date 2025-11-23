@@ -1,4 +1,7 @@
 # vim: ft=make
+CC = mpicc
+CXX = mpicxx
+FC = mpifort
 LIBEXT = dylib
 LIBNAME_C = my_macos
 LIBNAME_F = my_macos_f

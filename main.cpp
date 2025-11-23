@@ -1,30 +1,29 @@
 #include <cstddef>
-// #include <mpi.h>
 #include <iostream>
-#include <iomanip>
 
+#include "config_mpi.h"
 #include "librpa.h"
 
-#include <omp.h>  // Make sure to include OpenMP header
+static void initialize(int argc, char **argv)
+{
+    // MPI Initialization
+    int provided;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
+    // Initialization check
+    if (MPI_THREAD_MULTIPLE != provided)
+    {
+        printf("Warning: MPI_Init_thread provide %d != required %d", provided, MPI_THREAD_MULTIPLE);
+    }
+}
 
-// static void initialize(int argc, char **argv)
-// {
-//     // MPI Initialization
-//     int provided;
-//     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
-//     if (MPI_THREAD_MULTIPLE != provided)
-//     {
-//         printf("Warning: MPI_Init_thread provide %d != required %d", provided, MPI_THREAD_MULTIPLE);
-//     }
-// }
-// 
-// static void finalize(bool success)
-// {
-//     MPI_Finalize();
-// }
+static void finalize()
+{
+    MPI_Finalize();
+}
 
 int main(int argc, char *argv[])
 {
+    initialize(argc, argv);
     using namespace std;
 
     // initialize(argc, argv);
@@ -59,6 +58,6 @@ int main(int argc, char *argv[])
     cout << "opts_cpp.nfreq " << opts.nfreq << endl;
     cout << "opts_cpp.debug " << opts.debug << endl;
 
-    // finalize(true);
+    finalize();
     return EXIT_SUCCESS;
 }
