@@ -13,6 +13,8 @@ CXX ?= mpicxx
 FC ?= mpifort
 CC ?= mpicc
 
+COMMFLAGS = -g -fopenmp -fPIC
+
 MPI_OK := $(shell \
   tmp_src=$$(mktemp mpi_test.XXXXXX.f90); \
   tmp_exe=$$(mktemp mpi_test.XXXXXX.exe); \
@@ -22,11 +24,11 @@ MPI_OK := $(shell \
 
 ifeq ($(MPI_OK),yes)
   MOD_MPI_OBJ := mod_mpi_parallel.o
+  COMMFLAGS += -D__USE_MPI__
 else
   MOD_MPI_OBJ := mod_mpi_serial.o
 endif
 
-COMMFLAGS = -g -fopenmp -fPIC
 CFLAGS = $(COMMFLAGS)
 CXXFLAGS = $(COMMFLAGS)
 FCFLAGS = $(COMMFLAGS)

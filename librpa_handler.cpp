@@ -6,7 +6,7 @@
 #include "instance_manager.h"
 
 // C APIs
-LibrpaHandler* librpa_create_handler(MPI_Comm comm)
+LibrpaHandler* librpa_create_handler(int comm)
 {
     // create a new instance and append it to the manager
     int instance_id = librpa_int::manager.size();
@@ -50,7 +50,7 @@ void librpa_destroy_handler(LibrpaHandler *h)
 namespace librpa
 {
 
-Handler::Handler(const MPI_Comm comm): h(nullptr)
+Handler::Handler(int comm): h(nullptr)
 {
     h = ::librpa_create_handler(comm);
 }

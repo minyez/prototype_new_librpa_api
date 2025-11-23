@@ -14,7 +14,7 @@ typedef struct
     const int instance_id_;
 } LibrpaHandler;
 
-LibrpaHandler* librpa_create_handler(MPI_Comm comm);
+LibrpaHandler* librpa_create_handler(int comm);
 
 // void free_handler_data(LibrpaHandler *handler);
 
@@ -35,7 +35,7 @@ class Handler
 private:
     LibrpaHandler *h;
 public:
-    Handler(MPI_Comm comm);
+    Handler(int comm);
     LibrpaHandler *get_c_handler() const { return h; }
     ~Handler();
 };

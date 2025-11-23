@@ -1,7 +1,7 @@
 #pragma once
 
 // MPI related
-#ifdef __MPI
+#ifdef __USE_MPI__
 #include <mpi.h>
 #else
 
